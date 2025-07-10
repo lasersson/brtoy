@@ -112,7 +112,7 @@ ClipVertex vsMain(uint instance_id : SV_InstanceID, uint vertex_id : SV_VertexID
         float3 world_normal = mul(float4(v_normal, 0.0), instance.transform).xyz;
 
         out_vertex.pos = mul(float4(world_pos, 1.0), g_constants.view_projection);
-        out_vertex.normal = normalize(world_normal); //normalize(mul(float4(world_normal, 0.0), g_constants.view_projection)).xyz;
+        out_vertex.normal = world_normal;
     }
     return out_vertex;
 }
