@@ -191,21 +191,25 @@ bool Platform::tick(Input &input) {
             } else if (ri_count > 0) {
                 RAWINPUT *ri = rib;
                 for (UINT i = 0; i < ri_count; ++i) {
-                    RID_DEVICE_INFO ri_device = {};
-                    ri_device.cbSize = sizeof(RID_DEVICE_INFO);
-                    UINT ri_info_size = sizeof(ri_device);
-                    UINT res = GetRawInputDeviceInfoW(ri->header.hDevice, RIDI_DEVICEINFO,
-                                                      &ri_device, &ri_info_size);
-                    BRTOY_ASSERT(res == sizeof(RID_DEVICE_INFO));
-                    if (ri_device.dwType == RIM_TYPEMOUSE) {
-                        DWORD sample_rate = ri_device.mouse.dwSampleRate;
-                        float sample_rate_recip = 1.0f / sample_rate;
+                    DWORD sample_rate = 0;
+                    if (ri->header.hDevice) {
+                        RID_DEVICE_INFO ri_device = {};
+                        ri_device.cbSize = sizeof(RID_DEVICE_INFO);
+                        UINT ri_info_size = sizeof(ri_device);
+                        UINT res = GetRawInputDeviceInfoW(ri->header.hDevice, RIDI_DEVICEINFO,
+                                                          &ri_device, &ri_info_size);
+                        BRTOY_ASSERT(res == sizeof(RID_DEVICE_INFO));
+                        if (ri_device.dwType == RIM_TYPEMOUSE)
+                            sample_rate = ri_device.mouse.dwSampleRate;
+                    }
+                    if (ri->header.dwType == RIM_TYPEMOUSE) {
                         RAWMOUSE &rm = ri->data.mouse;
                         if (rm.usFlags & MOUSE_MOVE_ABSOLUTE) {
                             // TODO: Handle absolute mouse move (i.e. remote
                             // desktop, weird device?)
                         } else if (!(rm.lLastX == 0 && rm.lLastY == 0)) {
                             if (sample_rate != 0) {
+                                float sample_rate_recip = 1.0f / sample_rate;
                                 m_impl->m_cur_input.mouse_dx = (float)rm.lLastX * sample_rate_recip;
                                 m_impl->m_cur_input.mouse_dy = (float)rm.lLastY * sample_rate_recip;
                             } else {
@@ -253,6 +257,12 @@ Window Platform::createWindow(const char *name) {
             {
                 .usUsagePage = 0x1,
                 .usUsage = 0x2,
+                .dwFlags = RIDEV_INPUTSINK,
+                .hwndTarget = hwnd,
+            },
+            {
+                .usUsagePage = 0x1,
+                .usUsage = 0x1,
                 .dwFlags = RIDEV_INPUTSINK,
                 .hwndTarget = hwnd,
             },
