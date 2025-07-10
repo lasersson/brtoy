@@ -1,0 +1,23 @@
+brtoy
+-----
+
+Toy engine for experiments.
+
+Contains an example of GPU driven rendering which uses a global
+gometry buffer to store all mesh data. Does a simple frustum cull on the GPU and spits out a
+single draw call which draws everything.
+
+
+Building and running
+
+Only Windows supported. Requires CMake, might work with Visual Studio's embedded CMake and
+"Open -> Folder...". Only tested with MSVC 19 (Visual Studio 2022). For building from
+command line (make sure your compiler is on the PATH):
+
+ 1. Init git submodules: git submodule update --init --recursive
+ 2. Configure: cmake --preset win-rel
+ 3. Build: cmake --build build/win-rel
+    Takes a while first run because of building dependencies from source
+ 4. Run from the otput bin dir:
+    cd build/win-rel/bin
+    ./example_gpu_driven_rendering.exe

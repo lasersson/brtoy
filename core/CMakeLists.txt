@@ -1,0 +1,7 @@
+if(WIN32)
+	set(BRTOY_CORE_SOURCES core_win32.cpp)
+	set(BRTOY_CORE_DEFINES PUBLIC UNICODE _UNICODE)
+endif()
+add_library(brtoy_core ${BRTOY_CORE_SOURCES} vec.cpp)
+target_compile_definitions(brtoy_core ${BRTOY_CORE_DEFINES})
+target_include_directories(brtoy_core PUBLIC include)

@@ -1,0 +1,2 @@
+add_executable(example_clear_swapchain clear_swapchain.cpp)
+target_link_libraries(example_clear_swapchain PRIVATE brtoy_platform brtoy_gfx)

@@ -1,0 +1,81 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "common",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "WARNINGS_AS_ERRORS": "ON"
+            }
+        },
+        {
+            "name": "win",
+            "hidden": true,
+            "generator": "Ninja",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            }
+        },
+        {
+            "name": "deb",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CONFIGURATION_TYPES": "Debug"
+            }
+        },
+        {
+            "name": "reld",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_CONFIGURATION_TYPES": "RelWithDebInfo"
+            }
+        },
+        {
+            "name": "rel",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CONFIGURATION_TYPES": "Release"
+            }
+        },
+        {
+            "name": "win-deb",
+            "inherits": [ "common", "win", "deb" ],
+            "displayName": "Windows Debug"
+        },
+        {
+            "name": "win-reld",
+            "inherits": [ "common", "win", "reld" ],
+            "displayName": "Windows RelWithDebInfo"
+        },
+        {
+            "name": "win-rel",
+            "inherits": [ "common", "win", "rel" ],
+            "displayName": "Windows Release"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "win-deb",
+            "displayName": "Windows Debug",
+            "configuration": "Debug",
+            "configurePreset": "win-deb"
+        },
+        {
+            "name": "win-reld",
+            "displayName": "Windows RelWithDebInfo",
+            "configuration": "RelWithDebInfo",
+            "configurePreset": "win-reld"
+        },
+        {
+            "name": "win-rel",
+            "displayName": "Windows Release",
+            "configuration": "Release",
+            "configurePreset": "win-rel"
+        }
+    ]
+}
